@@ -10,13 +10,13 @@
 	</welcome-file-list>
 
 	<servlet>
-		<servlet-name>Helloworld</servlet-name>
+		<servlet-name>HelloWorld</servlet-name>
 		<servlet-class>tg.servlets.HelloWorld</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>Helloworld</servlet-name>
-		<url-pattern>Helloworld</url-pattern>
+		<servlet-name>HelloWorld</servlet-name>
+		<url-pattern>/Hello</url-pattern>
 	</servlet-mapping>
   
 </web-app>

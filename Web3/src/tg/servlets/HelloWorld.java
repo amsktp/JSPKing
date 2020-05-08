@@ -13,6 +13,19 @@ public class HelloWorld implements Servlet {
 	ServletConfig config;
 
 	@Override
+	public void init(ServletConfig config) throws ServletException {
+		// TODO Auto-generated method stub
+		System.out.println("init(ServletConfig config) 호출됨");
+		this.config = config;
+	}
+
+	@Override
+	public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		System.out.println("service() 호출됨");
+	}
+	
+	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
 		System.out.println("destroy() 호출됨");
@@ -32,17 +45,5 @@ public class HelloWorld implements Servlet {
 		return "getServletInfo() myname=lcy";
 	}
 
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		// TODO Auto-generated method stub
-		System.out.println("init(ServletConfig config) 호출됨");
-		this.config = config;
-	}
-
-	@Override
-	public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		System.out.println("service() 호출됨");
-	}
 
 }
