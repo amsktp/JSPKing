@@ -32,8 +32,9 @@ public class MemberUpdateServlet extends HttpServlet {
 		String user = "jsp";
 		String password = "jsp12";
 
+		String mNoStr = req.getParameter("mNo");
+		
 		int mNo = Integer.parseInt(req.getParameter("mNo"));
-		System.out.println(mNo);
 
 		try {
 
@@ -169,27 +170,25 @@ public class MemberUpdateServlet extends HttpServlet {
 			//이 순간 이미 데이터베이스에 반영됨
 			pstmt.executeUpdate();
 			
-			res.setContentType("text/html");
-			res.setCharacterEncoding("UTF-8");
-
-			PrintWriter out = res.getWriter();
-
-			String htmlStr = "";
-
-			htmlStr += "<html><head><title>회원정보 수정</title>";
+			res.sendRedirect("./list");
 			
-			htmlStr += "<meta http-equiv='Refresh' ";
-			htmlStr += "content='1; url=./list'>";
-
-			htmlStr += "</head>";
-			htmlStr += "<body>";
-			htmlStr += "<p>수정 성공입니다.!</p>";
-			htmlStr += "<a href='list'>";
-			htmlStr += "<input type='button' value='리스트 이동'>";
-			htmlStr += "</a>";
-			htmlStr += "</body></html>";
-			
-			out.println(htmlStr);
+//			res.setContentType("text/html");
+//			res.setCharacterEncoding("UTF-8");
+//
+//			PrintWriter out = res.getWriter();
+//
+//			String htmlStr = "";
+//
+//			htmlStr += "<html><head><title>회원정보 수정</title>";
+//			htmlStr += "</head>";
+//			htmlStr += "<body>";
+//			htmlStr += "<p>수정 성공입니다.!</p>";
+//			htmlStr += "<a href='list'>";
+//			htmlStr += "<input type='button' value='리스트 이동'>";
+//			htmlStr += "</a>";
+//			htmlStr += "</body></html>";
+//			
+//			out.println(htmlStr);
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

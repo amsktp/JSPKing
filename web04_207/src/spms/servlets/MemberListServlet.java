@@ -69,7 +69,6 @@ public class MemberListServlet extends GenericServlet {
 			response.setCharacterEncoding("UTF-8");
 
 			PrintWriter out = response.getWriter();
-
 			String htmlStr = "";
 			
 			

@@ -15,7 +15,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 
 //어노테이션 - 아주 강력한 주석
-@WebServlet("/guest/list")
+//@WebServlet("/guest/list")
 
 public class GuestListServlet extends GenericServlet {
 
@@ -38,17 +38,17 @@ public class GuestListServlet extends GenericServlet {
 
 		
 		//사용할 jdbc:드라이버:드라이버 타입:서버주소와 포트:db서비스 아이디
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		
-		String user = "jsp";
-		String password = "jsp12";
+		String url = this.getInitParameter("url");
+		String user = this.getInitParameter("user");
+		String password = this.getInitParameter("password");
+		String driverUrl = this.getInitParameter("driver");
 
 		try {
 			//클래스 로드
 			//1. jdbc드라이버 등록
 			
 			//우리가 가져온 jdbc파일의 클래스.파일명
-			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Class.forName(driverUrl);
 
 			//2. 데이터베이스 연결
 			conn = DriverManager.getConnection(url, user, password);

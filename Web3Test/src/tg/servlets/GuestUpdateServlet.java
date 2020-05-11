@@ -25,10 +25,16 @@ public class GuestUpdateServlet extends HttpServlet {
 		Connection conn = null; // 연결
 		PreparedStatement pstmt = null; // 상태
 		ResultSet rs = null; // 결과
-
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "jsp";
-		String password = "jsp12";
+		
+		String url = this.getInitParameter("url");
+		String user = this.getInitParameter("user");
+		String password = this.getInitParameter("password");
+		String driverUrl = this.getInitParameter("driver");
+		
+		
+//		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+//		String user = "jsp";
+//		String password = "jsp12";
 
 		int mNo = Integer.parseInt(req.getParameter("mNo"));
 		System.out.println(mNo);
@@ -36,7 +42,7 @@ public class GuestUpdateServlet extends HttpServlet {
 		
 		try {
 
-			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Class.forName(driverUrl);
 
 			conn = DriverManager.getConnection(url, user, password);
 
@@ -143,10 +149,15 @@ public class GuestUpdateServlet extends HttpServlet {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "jsp";
-		String password = "jsp12";
-		String driverUrl = "oracle.jdbc.driver.OracleDriver";
+//		String url = "jdbc:oracle:thin:@localhost:1521:xe";
+//		String user = "jsp";
+//		String password = "jsp12";
+//		String driverUrl = "oracle.jdbc.driver.OracleDriver";
+		
+		String url = this.getInitParameter("url");
+		String user = this.getInitParameter("user");
+		String password = this.getInitParameter("password");
+		String driverUrl = this.getInitParameter("driver");
 		
 		req.setCharacterEncoding("UTF-8");
 
@@ -177,26 +188,8 @@ public class GuestUpdateServlet extends HttpServlet {
 			//인서트 등 뭔가 바뀌는게 되면 update로 해야함
 			pstmt.executeUpdate();
 			//커밋은 오토커밋이 적용됨
-			res.setContentType("text/html");
-			res.setCharacterEncoding("UTF-8");
-
-			PrintWriter out = res.getWriter();
-
-			String htmlStr = "";
-
-			htmlStr += "<html><head><title>회원수정 결과</title>";
-			//새로고침(refresh)하는데 3(content)초 후에 list(url)로 간다는 말임
-			htmlStr += "<meta http-equiv='Refresh' ";
-			htmlStr += "content='3; url=./list'>";
-
-			htmlStr += "</head>";
-			htmlStr += "<body>";
-			htmlStr += "<p>수정 성공입니다.!</p>";
-			htmlStr += "<a href='./list'>";
-			htmlStr += "<input type='button' value='리스트 이동'>";
-			htmlStr += "</a>";
-			htmlStr += "</body></html>";
-			out.println(htmlStr);
+			
+			res.sendRedirect("./list");
 
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -229,14 +222,6 @@ public class GuestUpdateServlet extends HttpServlet {
 			}
 
 		}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	}
 

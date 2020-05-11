@@ -82,6 +82,9 @@ public class MemberAddServlet extends HttpServlet {
 
 			//인서트 등 뭔가 바뀌는게 되면 update로 해야함
 			pstmt.executeUpdate();
+
+
+			
 			//커밋은 오토커밋이 적용됨
 			res.setContentType("text/html");
 			res.setCharacterEncoding("UTF-8");
