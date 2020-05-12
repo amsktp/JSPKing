@@ -1,22 +1,23 @@
 package spms.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import spms.dto.MemberDto;
 
 //어노테이션 - 아주 강력한 주석
 @WebServlet("/member/list")
@@ -46,84 +47,96 @@ public class MemberListServlet extends HttpServlet {
 		// 선언은 큰 순부터 선언해준다 conn -> stmt -> rs
 
 		Connection conn = null; // 연결
-		Statement stmt = null; // 상태
+		PreparedStatement pstmt = null; // 상태
 		ResultSet rs = null; // 결과
 
 		// 사용할 jdbc:드라이버:드라이버 타입:서버주소와 포트:db서비스 아이디
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
 
-		String user = "jsp";
-		String password = "jsp12";
-
+		String driver = "";
+		String url = "";
+		String user = "";
+		String password = "";
+		
+		
 		try {
+			
+			ServletContext sc = this.getServletContext();
+			
+			driver = sc.getInitParameter("driver");
+			url = sc.getInitParameter("url");
+			user = sc.getInitParameter("user");
+			password = sc.getInitParameter("password");
+			
 			// 클래스 로드
 			// 1. jdbc드라이버 등록
 
 			// 우리가 가져온 jdbc파일의 클래스.파일명
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-
+			Class.forName(driver);
+			System.out.println("오라클 드라이버 로드 성공");
+			
 			// 2. 데이터베이스 연결
 			conn = DriverManager.getConnection(url, user, password);
-
+			System.out.println("오라클 드라이버 연결 성공");
+			
+			
 			// 3. sql 실행 객체 준비
-			stmt = conn.createStatement();
 
 			String sql = "SELECT MNO, MNAME, EMAIL, CRE_DATE" + " FROM MEMBER" + " ORDER BY MNO ASC";
 
+			pstmt = conn.prepareStatement(sql);
 			// sql 실행문
 			// 4. 결과 가져오기
-			rs = stmt.executeQuery(sql);
+			rs = pstmt.executeQuery();
 
+			System.out.println("쿼리 수행 성공");
+			
 			res.setContentType("text/html");
 			res.setCharacterEncoding("UTF-8");
-
-			PrintWriter out = res.getWriter();
-			String htmlStr = "";
-
-			htmlStr += "<html><head><title>회원목록</title></head>";
-			htmlStr += "<body><h1>회원목록</h1>";
-
-			// 추가 버튼
-			htmlStr += "<p>";
-			htmlStr += "<a href='./add'>신규 회원";
-			htmlStr += "</a>";
-			htmlStr += "</p>";
-
-			// 5. 출력
-			// rs는 length나 size가 없다. 무조건 next()로만 가능
-			while (rs.next()) {
-						
-						htmlStr += rs.getInt("mno") + "," ;
-						htmlStr += "<a href='./update?mNo=" + rs.getInt("mNo") + "'>";
-						htmlStr += rs.getString("mname") ;
-						htmlStr += "</a>" + "," ;
-						htmlStr += rs.getString("email") + ",";
-						htmlStr += rs.getDate("cre_date") ;
-						htmlStr += "<input type='hidden' name='mNo' value='" + rs.getInt("mno") + "'>";
-						htmlStr += "<a href='./delete?mNo=" + rs.getInt("mNo") + "'>";
-						htmlStr += "<input type='submit' value='회원탈퇴'>" ;
-						htmlStr += "</a>" + "," ;
-			}
-
-			htmlStr +="</body></html>";
 			
-			out.println(htmlStr);
-
-		} catch (ClassNotFoundException e) {
+			ArrayList<MemberDto> memberList = new ArrayList<MemberDto>();
+			
+			int mno = 0;
+			String mname = "";
+			String email = "";
+			Date creDate = null;
+			
+			while (rs.next()) {
+				mno = rs.getInt("MNO");
+				mname = rs.getString("MNAME");
+				email = rs.getString("EMAIL");
+				creDate = rs.getDate("CRE_DATE");
+				
+				MemberDto memberDto = new MemberDto();
+				memberDto.setNo(mno);
+				memberDto.setName(mname);
+				memberDto.setEmail(email);
+				memberDto.setCreateDate(creDate);
+				
+				memberList.add(memberDto);
+				
+			}
+			
+			// request에 회원 목록 데이터 보관
+			req.setAttribute("memberList", memberList);
+			
+			// jsp 페이지로 출력을 위임한다.
+			RequestDispatcher dispatcher = req.getRequestDispatcher("/member/MemberListView.jsp");
+			
+			
+			dispatcher.include(req, res);
+			
+			
+			
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			// 6. 자원 해제
-
-			// 무조건 해제하는 순서는 rs -> stmt -> conn (작은순)
-
-			// 결과셋 해제
+			throw new ServletException(e);
+			
+		}  finally {
 			if (rs != null) {
 				try {
 					rs.close();
+					System.out.println("ResultSet 종료");
 				} catch (SQLException e) {
 					// TODO: handle exception
 					e.printStackTrace();
@@ -131,9 +144,10 @@ public class MemberListServlet extends HttpServlet {
 			}
 
 			// 상태 해제
-			if (stmt != null) {
+			if (pstmt != null) {
 				try {
-					stmt.close();
+					pstmt.close();
+					System.out.println("쿼리(질의) 종료");
 				} catch (SQLException e) {
 					// TODO: handle exception
 					e.printStackTrace();
@@ -144,6 +158,7 @@ public class MemberListServlet extends HttpServlet {
 			if (conn != null) {
 				try {
 					conn.close();
+					System.out.println("DB 연결 종료");
 				} catch (SQLException e) {
 					// TODO: handle exception
 					e.printStackTrace();
@@ -156,7 +171,7 @@ public class MemberListServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		req.setCharacterEncoding("UTF-8");
+//		req.setCharacterEncoding("UTF-8");
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;

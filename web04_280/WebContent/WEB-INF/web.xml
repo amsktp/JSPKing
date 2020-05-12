@@ -3,7 +3,7 @@
 	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
 	id="WebApp_ID" version="3.1">
-	<display-name>web04_229</display-name>
+	<display-name>web04_280</display-name>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
@@ -27,6 +27,21 @@
 	</context-param>
 
 
+	<filter>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<filter-class>spms.filters.CharacterEncodingFilter</filter-class>
+		
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 	<servlet>
 		<servlet-name>MemberAdd</servlet-name>
 		<servlet-class>spms.servlets.MemberAddServlet</servlet-class>

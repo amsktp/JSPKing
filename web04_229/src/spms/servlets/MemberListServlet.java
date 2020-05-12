@@ -103,6 +103,7 @@ public class MemberListServlet extends HttpServlet {
 						htmlStr += "<a href='./delete?mNo=" + rs.getInt("mNo") + "'>";
 						htmlStr += "<input type='submit' value='회원탈퇴'>" ;
 						htmlStr += "</a>" + "," ;
+						htmlStr += "<br/>";
 			}
 
 			htmlStr +="</body></html>";
@@ -156,7 +157,7 @@ public class MemberListServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		req.setCharacterEncoding("UTF-8");
+//		req.setCharacterEncoding("UTF-8");
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;

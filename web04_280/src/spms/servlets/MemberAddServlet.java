@@ -1,4 +1,4 @@
-package tg.servlets;
+package spms.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,12 +7,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class GuestAddServlet extends HttpServlet {
+public class MemberAddServlet extends HttpServlet {
 
 	// doGet 자동완성 Go Go
 
@@ -35,8 +36,6 @@ public class GuestAddServlet extends HttpServlet {
 		htmlStr += "이름: <input type='text' name='name'></br>";
 		htmlStr += "이메일: <input type='text' name='email'></br>";
 		htmlStr += "암호: <input type='password' name='password'></br>";
-		htmlStr += "아이디: <input type='text' name='userId'></br>";
-		htmlStr += "급여: <input type='text' name='sal'></br>";
 		htmlStr += "<input type='submit' value='추가'>";
 		htmlStr += "<input type='reset' value='취소'>";
 		htmlStr += "</form>";
@@ -53,29 +52,36 @@ public class GuestAddServlet extends HttpServlet {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
-		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "jsp";
-		String password = "jsp12";
-		String driverUrl = "oracle.jdbc.driver.OracleDriver";
 		
 		//파라메타로 받은 것을 UTF-8 적용시켜줌
-		req.setCharacterEncoding("UTF-8");
+//		req.setCharacterEncoding("UTF-8");
 
 		//사용자의 입력을 받는다.
 		String emailStr = req.getParameter("email");
 		String pwdStr = req.getParameter("password");
 		String nameStr = req.getParameter("name");
-		String IdStr = req.getParameter("userId");
-		int sal = Integer.parseInt(req.getParameter("sal"));
+		
+		String url = "";
+		String user = "";
+		String password = "";
+		String driver = "";
 
 		try {
-			Class.forName(driverUrl);
+			
+			ServletContext sc = this.getServletContext();
+			
+			driver = sc.getInitParameter("driver");
+			url = sc.getInitParameter("url");
+			user = sc.getInitParameter("user");
+			password = sc.getInitParameter("password");
+			
+			Class.forName(driver);
 			conn = DriverManager.getConnection(url, user, password);
 
-			String sql = "insert into guest " 
+			String sql = "insert into member " 
 //						+ "(mno, email, pwd, mname, cre_date, mod_date) "
 //						+ "value(mno, email, pwd, mname, cre_date, mod_date) "
-						+ "values(guest_mno_seq.nextval, ?, ?, ?, sysdate, sysdate, ?, ?)";
+						+ "values(member_mno_seq.nextval, ?, ?, ?, sysdate, sysdate)";
 
 			//sql을 검증하기
 			pstmt = conn.prepareStatement(sql);
@@ -83,12 +89,14 @@ public class GuestAddServlet extends HttpServlet {
 			pstmt.setString(1, emailStr);
 			pstmt.setString(2, pwdStr);
 			pstmt.setString(3, nameStr);
-			pstmt.setString(4, IdStr);
-			pstmt.setInt(5, sal);
-			
 
 			//인서트 등 뭔가 바뀌는게 되면 update로 해야함
 			pstmt.executeUpdate();
+
+			
+			
+//			res.sendRedirect("./list");
+			
 			//커밋은 오토커밋이 적용됨
 			res.setContentType("text/html");
 			res.setCharacterEncoding("UTF-8");
@@ -117,15 +125,15 @@ public class GuestAddServlet extends HttpServlet {
 			System.out.println("jdbc 오라클 드라이버 로드 실패");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("insert into guest 수행 실패");
+			System.out.println("insert into member 수행 실패");
 		} finally {
 
 			if (pstmt != null) {
 				try {
 					pstmt.close();
-				} catch (SQLException e) {
+				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					e1.printStackTrace();
 					System.out.println("pstmt 종료 실패");
 				}
 

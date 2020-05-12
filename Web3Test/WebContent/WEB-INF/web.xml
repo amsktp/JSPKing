@@ -8,31 +8,30 @@
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
-	
+
+	<context-param>
+		<param-name>driver</param-name>
+		<param-value>oracle.jdbc.driver.OracleDriver</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>url</param-name>
+		<param-value>jdbc:oracle:thin:@localhost:1521:xe</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>user</param-name>
+		<param-value>jsp</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>password</param-name>
+		<param-value>jsp12</param-value>
+	</context-param>
+
 	<servlet>
 		<servlet-name>GuestList</servlet-name>
-		<servlet-class>tg.servlets.GuestListServlet</servlet-class>
-		
-		<init-param>
-			<param-name>driver</param-name>
-			<param-value>oracle.jdbc.driver.OracleDriver</param-value>
-		</init-param>
-
-		<init-param>
-			<param-name>url</param-name>
-			<param-value>jdbc:oracle:thin:@localhost:1521:xe</param-value>
-		</init-param>
-
-		<init-param>
-			<param-name>user</param-name>
-			<param-value>jsp</param-value>
-		</init-param>
-
-		<init-param>
-			<param-name>password</param-name>
-			<param-value>jsp12</param-value>
-		</init-param>
-		
+		<servlet-class>spms.servlets.GuestListServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -40,41 +39,21 @@
 		<url-pattern>/guest/list</url-pattern>
 	</servlet-mapping>
 
-	
+
 	<servlet>
 		<servlet-name>GuestAdd</servlet-name>
-		<servlet-class>tg.servlets.GuestAddServlet</servlet-class>
+		<servlet-class>spms.servlets.GuestAddServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>GuestAdd</servlet-name>
 		<url-pattern>/guest/add</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>GuestUpdate</servlet-name>
-		<servlet-class>tg.servlets.GuestUpdateServlet</servlet-class>
-		
-		<init-param>
-			<param-name>driver</param-name>
-			<param-value>oracle.jdbc.driver.OracleDriver</param-value>
-		</init-param>
+		<servlet-class>spms.servlets.GuestUpdateServlet</servlet-class>
 
-		<init-param>
-			<param-name>url</param-name>
-			<param-value>jdbc:oracle:thin:@localhost:1521:xe</param-value>
-		</init-param>
-
-		<init-param>
-			<param-name>user</param-name>
-			<param-value>jsp</param-value>
-		</init-param>
-
-		<init-param>
-			<param-name>password</param-name>
-			<param-value>jsp12</param-value>
-		</init-param>
-		
 	</servlet>
 
 	<servlet-mapping>
