@@ -101,6 +101,7 @@ public class MemberListServlet extends HttpServlet {
 			// jsp 페이지로 출력을 위임한다.
 			RequestDispatcher dispatcher = req.getRequestDispatcher("/member/MemberListView.jsp");
 			dispatcher.include(req, res);
+			//여기도 사실 forward가 맞음
 			
 			System.out.println("나 실행된다?");
 			
@@ -149,20 +150,13 @@ public class MemberListServlet extends HttpServlet {
 
 		ServletContext sc = this.getServletContext();
 
-		String driver = sc.getInitParameter("driver");
-		String url = sc.getInitParameter("url");
-		String user = sc.getInitParameter("user");
-		String password = sc.getInitParameter("password");
-		
 		int mNo = Integer.parseInt(req.getParameter("mNo"));
 
 		String sql = "";
 
 		try {
-			Class.forName(driver);
-			System.out.println("오라클 드라이버 로드");
 
-			conn = DriverManager.getConnection(url, user, password);
+			conn = (Connection) sc.getAttribute("conn");
 
 			sql += "delete from member ";
 			sql += "where mno = ?";
@@ -194,9 +188,6 @@ public class MemberListServlet extends HttpServlet {
 //			
 //			out.println(htmlStr);
 
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -211,16 +202,6 @@ public class MemberListServlet extends HttpServlet {
 				}
 			}
 
-			if (conn != null) {
-
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
 		}
 
 	}
