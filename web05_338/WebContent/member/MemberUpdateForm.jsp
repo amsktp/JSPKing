@@ -7,6 +7,19 @@
 <meta charset="UTF-8">
 <title>회원정보</title>
 
+<script type="text/javascript">
+	function pageMoveListFnc() {
+		location.href = './list';
+	}
+
+	function pageMoveDeleteFnc(no) {
+		
+		var url = "./delete?no=" + no
+		location.href = url;
+		
+	}
+
+</script>
 </head>
 	
 <body>
@@ -22,8 +35,8 @@
 		이메일: <input type='text' name='email' value='${memberDto.email}'><br/>
 		가입일: ${requestScope.memberDto.createDate}<br>
 		<input type='submit' value='저장'>
-		<input type='button' value='삭제' onclick='location.href="./delete?no=${memberDto.no}"'>
-		<input type='button' value='취소' onclick='location.href="./list"'>
+		<input type='button' value='삭제' onclick='pageMoveDeleteFnc(${memberDto.no});'>
+		<input type='button' value='취소' onclick='pageMoveListFnc();'>
 
 	</form>
 

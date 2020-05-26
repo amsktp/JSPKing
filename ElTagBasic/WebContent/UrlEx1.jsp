@@ -8,22 +8,18 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>리터럴 표현식</title>
+	<title>c:url url을 만들 때 사용</title>
 </head>
-
-<%
-
-	List<String> nameList = new ArrayList<String>();
-
-	nameList.add("홍길동");
-	nameList.add("일지매");
-	nameList.add("임꺽정");
-
-	request.setAttribute("nameList", nameList);
-%>
 
 <body>
 
-	${nameList[2]};
+	<c:url var="htmlUrl" value="http://localhost:9123/ElTagBasic/OutEx1.jsp">
+		<c:param name="v1" value="20"/>
+		<c:param name="v2" value="30"/>
+<!-- 		매게변수 -->
+	</c:url>
+
+	<a href="${htmlUrl}">다른 페이지 이동</a>
+	
 </body>
 </html>

@@ -19,6 +19,8 @@
 	UserVo userVo2 = new UserVo(10, "이찬양", "teㄷㄷㄷst@test.com");
 	session.setAttribute("userVo", userVo);
 	request.setAttribute("userVo", userVo2);
+	
+
 %>
 
 <!-- 

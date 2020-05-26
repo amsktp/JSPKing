@@ -13,11 +13,12 @@
 	}
 </script>
 
+
 </head>
 
 <body>
 
-	<p onclick="listPageMoveFnc();">338 페이지</p>
+	<p onclick="listPageMoveFnc();">376 페이지</p>
 
 </body>
 

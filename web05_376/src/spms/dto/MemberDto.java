@@ -15,6 +15,14 @@ public class MemberDto {
 		super();
 	}
 
+	public MemberDto(int no, String name, String email, Date createDate) {
+		super();
+		this.no = no;
+		this.name = name;
+		this.email = email;
+		this.createDate = createDate;
+	}
+
 	public MemberDto(int no, String name, 
 			String email, String password, 
 			Date createDate, Date modifiedDate) {
@@ -26,6 +34,7 @@ public class MemberDto {
 		this.createDate = createDate;
 		this.modifiedDate = modifiedDate;
 	}
+
 
 
 	public int getNo() {

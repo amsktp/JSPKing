@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import spms.dao.MemberDao;
 import spms.dto.MemberDto;
 
 @WebServlet("/member/list")
@@ -39,80 +40,28 @@ public class MemberListServlet extends HttpServlet {
 			
 			conn = (Connection)sc.getAttribute("conn");
 			
-//			3 sql 실행 객체 준비
-			stmt = conn.createStatement();
+			MemberDao memberDao = new MemberDao();
+			memberDao.setConnection(conn);
 			
-			String sql = "SELECT MNO, MNAME, EMAIL, CRE_DATE"
-					+ " FROM MEMBER"
-					+ " ORDER BY MNO ASC";
+			ArrayList<MemberDto> memberList = null;
 			
+			memberList = (ArrayList<MemberDto>)memberDao.selectList();
 			
-			// sql 실행문
-			// 4 결과 가져오기
-			rs = stmt.executeQuery(sql);
-			
-			response.setContentType("text/html");
-			response.setCharacterEncoding("UTF-8");
-			
-			ArrayList<MemberDto> memberList = 
-					new ArrayList<MemberDto>();
-			
-			int mno = 0;
-			String mname = "";
-			String email = "";
-			Date creDate = null;
-			
-			while (rs.next()) {
-				mno = rs.getInt("MNO");
-				mname = rs.getString("MNAME");
-				email = rs.getString("EMAIL");
-				creDate = rs.getDate("CRE_DATE");
-				
-				MemberDto memberDto = new MemberDto();
-				memberDto.setNo(mno);
-				memberDto.setName(mname);
-				memberDto.setEmail(email);
-				memberDto.setCreateDate(creDate);
-				
-				memberList.add(memberDto);
-			}
-			
-			// request에 회원 목록 데이터 보관
 			request.setAttribute("memberList", memberList);
 			
-			// jsp페이지로 출력을 위임한다
 			RequestDispatcher dispatcher = 
 					request.getRequestDispatcher(
 							"/member/MemberListView.jsp");
-			dispatcher.include(request, response);
+			
+			dispatcher.forward(request, response);
 			
 		} catch (Exception e) {
 			request.setAttribute("error", e);
 			RequestDispatcher dispatcher =
 					request.getRequestDispatcher("/Error.jsp");
 			dispatcher.forward(request, response);
-		} finally {
-			if(rs != null) {
-				try {
-					rs.close();
-				}catch (SQLException e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
-			}
-			
-			// 상태 해제
-			if(stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
-			}
-			
-		} // finally 종료
-
+		}
+		
 	}
 	
 	@Override

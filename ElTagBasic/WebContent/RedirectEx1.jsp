@@ -8,22 +8,15 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>리터럴 표현식</title>
+	<title>c:redirect 센드 리다이렉트랑 동일함</title>
 </head>
-
-<%
-
-	List<String> nameList = new ArrayList<String>();
-
-	nameList.add("홍길동");
-	nameList.add("일지매");
-	nameList.add("임꺽정");
-
-	request.setAttribute("nameList", nameList);
-%>
 
 <body>
 
-	${nameList[2]};
+	<c:redirect url="http://www.daum.net"/>
+
+<!-- 	즉시 지정된 사이트로 이동 -->
+
+<!-- 	잘 쓰지 않고 아주 특별한 상황에서 사용함 -->
 </body>
 </html>
