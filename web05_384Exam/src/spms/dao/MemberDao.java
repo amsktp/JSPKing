@@ -332,4 +332,63 @@ public class MemberDao {
 		return null;
 	}
 
+	
+	public int[] memberBatchDelete(List<MemberDto> memberList) throws Exception {
+		
+		int[] resultNumArr = null;
+
+		conn.setAutoCommit(false);
+		
+		PreparedStatement pstmt = null;
+
+		String sql = "";
+		sql = "DELETE FROM MEMBER";
+		sql += " WHERE MNO = ?";
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			int no = 0;
+			
+			for (int i = 0; i < 3; i++) {
+				no = memberList.get(i).getNo();
+				
+				pstmt.setInt(1, no);
+				pstmt.addBatch();
+				pstmt.clearParameters();
+				
+			}
+			//batch 실행
+			resultNumArr = pstmt.executeBatch();
+
+			//batch 초기화
+			pstmt.clearBatch();
+			
+			conn.commit();
+			
+			return resultNumArr;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			
+//			실패했을경우 롤백 해야만 함
+			conn.rollback();
+			
+			e.printStackTrace();
+			throw e;
+		} finally {
+			conn.setReadOnly(true);
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		} // finally 종료
+
+	}
+	
 }
